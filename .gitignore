@@ -1,0 +1,15 @@
+node_modules/
+backend/node_modules/
+frontend/frontend/node_modules/
+frontend/frontend/build/
+frontend/frontend/coverage/
+frontend/frontend/.vercel/
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/frontend/.env
+frontend/frontend/.env.*
+!.env.example
+confidential.txt
+.DS_Store
