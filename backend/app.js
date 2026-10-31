@@ -97,7 +97,17 @@ const apiLimiter = rateLimit({
 });
 
 app.use("/api", apiLimiter);
-app.use(csrf({ cookie: true }));
+app.use(
+  csrf({
+    cookie: {
+      key: "_csrf",
+      httpOnly: true,
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
+      path: "/",
+    },
+  })
+);
 
 app.get("/api/health", (req, res) => {
   res.json({ status: "ok" });
