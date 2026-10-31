@@ -3,7 +3,8 @@ import "./App.css";
 import ProctorCamera, { LiveReviewerFeed } from "./ProctorCamera";
 import { connectLiveSocket } from "./liveSocket";
 
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:9999";
+const API_URL =
+  process.env.REACT_APP_API_URL || "https://testing-your-iq-and-eq.onrender.com";
 
 const requestApi = async (path, { method = "GET", body, csrfToken } = {}) => {
   const headers = {};

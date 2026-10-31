@@ -18,6 +18,6 @@ services:
       - key: ADMIN_PASSWORD
         sync: false
       - key: CORS_ALLOWED_ORIGINS
-        sync: false
+        value: https://testing-your-iq-and-eq.vercel.app
       - key: FRONTEND_URL
-        sync: false
+        value: https://testing-your-iq-and-eq.vercel.app
