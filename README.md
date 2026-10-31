@@ -39,7 +39,7 @@ Mutating endpoints use the existing CSRF-token flow. Student requests cannot set
 
 ## Deploying to Render and Vercel
 
-The Render Blueprint at `render.yaml` configures the API service, health check, and CORS origins for `https://testing-your-iq-and-eq.vercel.app`. Connect the assessment repository to Render and deploy the Blueprint, then provide these secret/environment values in Render:
+The Render Blueprint at `render.yaml` configures the API service, health check, and CORS origins for `https://testing-your-iq-and-eq.vercel.app`. The backend also allows this frontend origin by default. Connect the assessment repository to Render and deploy the Blueprint, then provide these secret/environment values in Render:
 
 - `MONGO_URI` — MongoDB Atlas connection string.
 - `ADMIN_EMAIL` and `ADMIN_PASSWORD` — initial admin account details; use a unique password of at least 12 characters.

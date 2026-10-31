@@ -17,6 +17,7 @@ app.set("trust proxy", 1);
 export const allowedOrigins = [
   "http://localhost:3000",
   "http://127.0.0.1:3000",
+  "https://testing-your-iq-and-eq.vercel.app",
   ...(process.env.CORS_ALLOWED_ORIGINS || "")
     .split(",")
     .map((origin) => origin.trim())
