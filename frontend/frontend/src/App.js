@@ -555,6 +555,8 @@ function App() {
               <label>
                 Full name
                 <input
+                  id="name"
+                  name="name"
                   type="text"
                   value={credentials.name}
                   onChange={(event) =>
@@ -571,6 +573,8 @@ function App() {
             <label>
               Email
               <input
+                id="email"
+                name="email"
                 type="email"
                 value={credentials.email}
                 onChange={(event) =>
@@ -584,6 +588,8 @@ function App() {
             <label>
               Password
               <input
+                id="password"
+                name="password"
                 type="password"
                 value={credentials.password}
                 onChange={(event) =>
@@ -767,6 +773,8 @@ function App() {
                         <label>
                           Final score
                           <input
+                            id={`score-${submission._id}`}
+                            name={`score-${submission._id}`}
                             type="number"
                             min="0"
                             max="100"
@@ -992,6 +1000,7 @@ export function StudentDashboard({
                         <label className="question-option" key={option.id}>
                           <input
                             type="radio"
+                            id={`answer-${currentQuestion.id}-${option.id}`}
                             name={currentQuestion.id}
                             value={option.id}
                             checked={answers[currentQuestion.id] === option.id}
@@ -1043,6 +1052,8 @@ export function StudentDashboard({
               <label>
                 Assessment type
                 <select
+                  id="exam-type"
+                  name="examType"
                   value={examType}
                   onChange={(event) => setExamType(event.target.value)}
                   disabled={isLoading}

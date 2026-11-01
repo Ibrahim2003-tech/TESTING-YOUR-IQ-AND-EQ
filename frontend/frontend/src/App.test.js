@@ -24,6 +24,10 @@ test("renders the student sign-in screen when there is no session", async () => 
   expect(screen.getByRole("heading", { name: "Sign in" })).toBeInTheDocument();
   expect(screen.getByLabelText("Email")).toBeInTheDocument();
   expect(screen.getByLabelText("Password")).toBeInTheDocument();
+  expect(screen.getByLabelText("Email")).toHaveAttribute("id", "email");
+  expect(screen.getByLabelText("Email")).toHaveAttribute("name", "email");
+  expect(screen.getByLabelText("Password")).toHaveAttribute("id", "password");
+  expect(screen.getByLabelText("Password")).toHaveAttribute("name", "password");
   await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
   expect(global.fetch).toHaveBeenLastCalledWith(
     expect.stringMatching(/\/api\/auth\/session$/),
