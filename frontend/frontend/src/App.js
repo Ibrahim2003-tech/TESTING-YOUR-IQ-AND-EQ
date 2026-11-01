@@ -4,6 +4,10 @@ import ProctorCamera, { LiveReviewerFeed } from "./ProctorCamera";
 import { connectLiveSocket } from "./liveSocket";
 
 const API_URL =
+  process.env.NODE_ENV === "production"
+    ? ""
+    : process.env.REACT_APP_API_URL || "http://localhost:9999";
+const SOCKET_URL =
   process.env.REACT_APP_API_URL || "https://testing-your-iq-and-eq.onrender.com";
 
 const requestApi = async (path, { method = "GET", body, csrfToken } = {}) => {
@@ -113,9 +117,19 @@ function App() {
       return undefined;
     }
 
-    const connection = connectLiveSocket(API_URL, {
+    let active = true;
+    const connection = connectLiveSocket(SOCKET_URL, {
+      auth: (callback) => {
+        requestApi("/api/auth/socket-token")
+          .then(({ socketToken }) => callback({ token: socketToken }))
+          .catch((connectionError) => {
+            if (active) {
+              setError(connectionError.message || "Unable to connect to live proctoring.");
+            }
+            callback({});
+          });
+      },
       withCredentials: true,
-      transports: ["websocket"],
       autoConnect: false,
     });
     const updateLiveSession = (session) => {
@@ -143,6 +157,7 @@ function App() {
     connection.connect();
 
     return () => {
+      active = false;
       connection.disconnect();
       setSocket((current) => (current === connection ? null : current));
     };
@@ -164,12 +179,14 @@ function App() {
         if (!active) return;
         setCsrfToken(token);
 
-        const data = await requestApi("/api/auth/me");
+        const data = await requestApi("/api/auth/session");
         if (!active) return;
-        setUser(data.user);
-        await loadRoleData(data.user);
+        if (data.user) {
+          setUser(data.user);
+          await loadRoleData(data.user);
+        }
       } catch (sessionError) {
-        if (active && sessionError.status !== 401) {
+        if (active) {
           setError(sessionError.message || "Unable to connect to the assessment service.");
         }
       }

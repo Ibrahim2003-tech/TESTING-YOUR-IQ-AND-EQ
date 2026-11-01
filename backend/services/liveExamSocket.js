@@ -17,17 +17,20 @@ const publicSession = ({ sessionId, studentId, studentName, examType, startedAt,
 export const attachLiveExamSocket = (httpServer, allowedOrigins) => {
   const io = new Server(httpServer, {
     cors: { origin: allowedOrigins, credentials: true },
-    transports: ["websocket"],
   });
 
   io.use(async (socket, next) => {
     try {
-      const token = parse(socket.handshake.headers.cookie || "").token;
+      const socketToken = socket.handshake.auth?.token;
+      const token = socketToken || parse(socket.handshake.headers.cookie || "").token;
       if (!token) {
         return next(new Error("Authentication required."));
       }
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      if (socketToken && decoded.purpose !== "socket") {
+        return next(new Error("Authentication required."));
+      }
       const user = await User.findById(decoded.id).select("name role");
       if (!user) {
         return next(new Error("Authentication required."));

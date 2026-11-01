@@ -10,12 +10,12 @@ afterEach(() => {
 test("renders the student sign-in screen when there is no session", async () => {
   global.fetch = jest.fn().mockImplementation((url) =>
     Promise.resolve({
-      ok: url.endsWith("/csrf-token"),
-      status: url.endsWith("/csrf-token") ? 200 : 401,
+      ok: true,
+      status: 200,
       json: async () =>
         url.endsWith("/csrf-token")
           ? { csrfToken: "test-csrf-token" }
-          : { message: "Authentication required" },
+          : { user: null },
     })
   );
 
@@ -25,4 +25,8 @@ test("renders the student sign-in screen when there is no session", async () => 
   expect(screen.getByLabelText("Email")).toBeInTheDocument();
   expect(screen.getByLabelText("Password")).toBeInTheDocument();
   await waitFor(() => expect(global.fetch).toHaveBeenCalledTimes(2));
+  expect(global.fetch).toHaveBeenLastCalledWith(
+    expect.stringMatching(/\/api\/auth\/session$/),
+    expect.objectContaining({ credentials: "include" })
+  );
 });

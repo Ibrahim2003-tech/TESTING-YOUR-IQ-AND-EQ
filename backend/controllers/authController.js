@@ -151,4 +151,31 @@ export const getCurrentUser = async (req, res) => {
   return res.json({ user: req.user });
 };
 
+export const getSession = async (req, res) => {
+  const token = req.cookies?.token;
+  if (!token) {
+    return res.json({ user: null });
+  }
+
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET);
+    const user = await User.findById(decoded.id).select("-password");
+    return res.json({ user: user || null });
+  } catch (error) {
+    if (error instanceof jwt.JsonWebTokenError) {
+      return res.json({ user: null });
+    }
+    throw error;
+  }
+};
+
+export const getSocketToken = async (req, res) => {
+  const socketToken = jwt.sign(
+    { id: req.user._id, purpose: "socket" },
+    JWT_SECRET,
+    { expiresIn: "1m" }
+  );
+  return res.json({ socketToken });
+};
+
 export { seedAdminUser };
